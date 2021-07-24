@@ -4,7 +4,7 @@
 
 Port of Go's bytes.Buffer
 
-```
+```v
 import takkyuuplayer.bytebuf
 
 fn main() {
