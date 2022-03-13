@@ -66,13 +66,13 @@ fn (mut b Buffer) try_grow(n int) ?int {
 		// slice. We only need m+n <= c to slide, but
 		// we instead let capacity get twice as large so we
 		// don't spend all our time copying.
-		copy(b.buf, b.buf[b.off..])
+		copy(mut b.buf, b.buf[b.off..])
 	} else if c > bytebuf.max_int - c - n {
 		return bytebuf.err_too_large
 	} else {
 		// Not enough space anywhere, we need to allocate.
-		buf := []byte{len: 2 * c + n}
-		copy(buf, b.buf[b.off..])
+		mut buf := []byte{len: 2 * c + n}
+		copy(mut buf, b.buf[b.off..])
 		b.buf = buf
 	}
 	// Restore b.off and b.buf.len
@@ -91,7 +91,7 @@ fn (mut b Buffer) grow(n int) ? {
 
 pub fn (mut b Buffer) write(p []byte) ?int {
 	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len) ? }
-	return copy(b.buf[m..], p)
+	return copy(mut b.buf[m..], p)
 }
 
 // new creates and initializes a new Buffer using buf as its
