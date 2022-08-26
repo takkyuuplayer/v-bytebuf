@@ -85,12 +85,12 @@ fn (mut b Buffer) grow(n int) ? {
 	if n < 0 {
 		return error('bytebuf.Buffer.grow: negative count')
 	}
-	m := b.try_grow(n) ?
+	m := b.try_grow(n)?
 	b.buf = b.buf[..m]
 }
 
 pub fn (mut b Buffer) write(p []byte) ?int {
-	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len) ? }
+	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len)? }
 	return copy(mut b.buf[m..], p)
 }
 

@@ -68,19 +68,19 @@ fn test_reset() {
 
 fn test_write() ? {
 	mut b1 := new([]byte{})
-	b1.write('abc'.bytes()) ?
+	b1.write('abc'.bytes())?
 
 	assert b1.str() == 'abc'
 	assert b1.buf.len == 3
 	assert b1.buf.cap == 64
 
-	b1.write('def'.bytes()) ?
+	b1.write('def'.bytes())?
 
 	assert b1.str() == 'abcdef'
 	assert b1.buf.len == 6
 	assert b1.buf.cap == 64
 
-	b1.write('xyz'.bytes().repeat(100)) ?
+	b1.write('xyz'.bytes().repeat(100))?
 
 	assert b1.str() == 'abcdef' + 'xyz'.repeat(100)
 	assert b1.buf.len == 306
