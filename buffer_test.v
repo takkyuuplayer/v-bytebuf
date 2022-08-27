@@ -1,7 +1,9 @@
 module bytebuf
 
+import io
+
 fn test_u8s() {
-	b1 := new([]byte{})
+	b1 := new([]u8{})
 
 	assert b1.u8s() == []
 
@@ -15,7 +17,7 @@ fn test_u8s() {
 }
 
 fn test_string() {
-	b1 := new([]byte{})
+	b1 := new([]u8{})
 
 	assert b1.str() == ''
 
@@ -45,7 +47,7 @@ fn test_len() {
 }
 
 fn test_cap() {
-	b1 := new([]byte{})
+	b1 := new([]u8{})
 
 	assert b1.cap() == 0
 
@@ -67,7 +69,7 @@ fn test_reset() {
 }
 
 fn test_write() ? {
-	mut b1 := new([]byte{})
+	mut b1 := new([]u8{})
 	b1.write('abc'.bytes())?
 
 	assert b1.str() == 'abc'
@@ -84,4 +86,11 @@ fn test_write() ? {
 
 	assert b1.str() == 'abcdef' + 'xyz'.repeat(100)
 	assert b1.buf.len == 306
+}
+
+fn test_interface() {
+	iface := fn (_ io.Writer) bool {
+		return true
+	}
+	assert iface(new([]u8{}))
 }
