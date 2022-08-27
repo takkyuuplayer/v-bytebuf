@@ -16,12 +16,12 @@ mut:
 	buf []u8
 }
 
-pub fn (b Buffer) u8s() []u8{
+pub fn (b Buffer) u8s() []u8 {
 	return b.buf[b.off..]
 }
 
 // deprecated. Use u8s instead.
-pub fn (b Buffer) bytes() []u8{
+pub fn (b Buffer) bytes() []u8 {
 	return b.buf[b.off..]
 }
 
