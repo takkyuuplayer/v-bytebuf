@@ -13,10 +13,15 @@ pub const err_too_large = error('bytebuf.Buffer: too large')
 pub struct Buffer {
 mut:
 	off int
-	buf []byte
+	buf []u8
 }
 
-pub fn (b Buffer) bytes() []byte {
+pub fn (b Buffer) u8s() []u8 {
+	return b.buf[b.off..]
+}
+
+// deprecated. Use u8s instead.
+pub fn (b Buffer) bytes() []u8 {
 	return b.buf[b.off..]
 }
 
@@ -85,12 +90,12 @@ fn (mut b Buffer) grow(n int) ? {
 	if n < 0 {
 		return error('bytebuf.Buffer.grow: negative count')
 	}
-	m := b.try_grow(n) ?
+	m := b.try_grow(n)?
 	b.buf = b.buf[..m]
 }
 
 pub fn (mut b Buffer) write(p []byte) ?int {
-	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len) ? }
+	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len)? }
 	return copy(mut b.buf[m..], p)
 }
 
@@ -103,7 +108,7 @@ pub fn (mut b Buffer) write(p []byte) ?int {
 //
 // In most cases, new(Buffer) (or just declaring a Buffer variable) is
 // sufficient to initialize a Buffer.
-pub fn new(buf []byte) Buffer {
+pub fn new(buf []u8) Buffer {
 	return Buffer{
 		buf: buf
 	}
