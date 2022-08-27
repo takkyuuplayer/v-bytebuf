@@ -62,7 +62,7 @@ fn (mut b Buffer) try_grow(n int) ?int {
 		return i
 	}
 	if b.buf == [] && n <= bytebuf.small_buffer_size {
-		b.buf = []byte{len: n, cap: bytebuf.small_buffer_size}
+		b.buf = []u8{len: n, cap: bytebuf.small_buffer_size}
 		return 0
 	}
 	c := b.buf.len
@@ -76,7 +76,7 @@ fn (mut b Buffer) try_grow(n int) ?int {
 		return bytebuf.err_too_large
 	} else {
 		// Not enough space anywhere, we need to allocate.
-		mut buf := []byte{len: 2 * c + n}
+		mut buf := []u8{len: 2 * c + n}
 		copy(mut buf, b.buf[b.off..])
 		b.buf = buf
 	}
@@ -94,7 +94,7 @@ fn (mut b Buffer) grow(n int) ? {
 	b.buf = b.buf[..m]
 }
 
-pub fn (mut b Buffer) write(p []byte) ?int {
+pub fn (mut b Buffer) write(p []u8) ?int {
 	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len)? }
 	return copy(mut b.buf[m..], p)
 }
