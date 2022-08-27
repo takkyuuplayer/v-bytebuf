@@ -1,17 +1,17 @@
 module bytebuf
 
-fn test_bytes() {
+fn test_u8s() {
 	b1 := new([]byte{})
 
-	assert b1.bytes() == []
+	assert b1.u8s() == []
 
 	mut b2 := new([byte(1), 2, 3])
 
-	assert b2.bytes() == [byte(1), 2, 3]
+	assert b2.u8s() == [u8(1), 2, 3]
 
 	b2.off = 1
 
-	assert b2.bytes() == [byte(2), 3]
+	assert b2.u8s() == [u8(2), 3]
 }
 
 fn test_string() {
@@ -34,7 +34,7 @@ fn test_len() {
 	assert b1.len() == 0
 
 	mut b2 := Buffer{
-		buf: [byte(`a`), `b`, `c`]
+		buf: [u8(`a`), `b`, `c`]
 	}
 
 	assert b2.len() == 3
