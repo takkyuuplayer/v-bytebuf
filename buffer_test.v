@@ -1,7 +1,5 @@
 module bytebuf
 
-import io
-
 fn test_u8s() {
 	b1 := new([]u8{})
 
@@ -86,11 +84,4 @@ fn test_write() ? {
 
 	assert b1.str() == 'abcdef' + 'xyz'.repeat(100)
 	assert b1.buf.len == 306
-}
-
-fn test_interface() {
-	iface := fn (_ io.Writer) bool {
-		return true
-	}
-	assert iface(new([]u8{}))
 }
