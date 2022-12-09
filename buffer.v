@@ -42,7 +42,7 @@ pub fn (mut b Buffer) reset() {
 	b.off = 0
 }
 
-fn (mut b Buffer) try_grow_by_reslice(n int) ?int {
+fn (mut b Buffer) try_grow_by_reslice(n int) !int {
 	l := b.buf.len
 	if n <= b.buf.cap - l {
 		unsafe { b.buf.grow_len(n) }
@@ -51,7 +51,7 @@ fn (mut b Buffer) try_grow_by_reslice(n int) ?int {
 	return error('not possible')
 }
 
-fn (mut b Buffer) try_grow(n int) ?int {
+fn (mut b Buffer) try_grow(n int) !int {
 	m := b.len()
 	// If buffer is empty, reset to recover space.
 	if m == 0 && b.off != 0 {
@@ -86,16 +86,16 @@ fn (mut b Buffer) try_grow(n int) ?int {
 	return m
 }
 
-fn (mut b Buffer) grow(n int) ? {
+fn (mut b Buffer) grow(n int) ! {
 	if n < 0 {
 		return error('bytebuf.Buffer.grow: negative count')
 	}
-	m := b.try_grow(n)?
+	m := b.try_grow(n)!
 	b.buf = b.buf[..m]
 }
 
-pub fn (mut b Buffer) write(p []u8) ?int {
-	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len)? }
+pub fn (mut b Buffer) write(p []u8) !int {
+	m := b.try_grow_by_reslice(p.len) or { b.try_grow(p.len)! }
 	return copy(mut b.buf[m..], p)
 }
 
