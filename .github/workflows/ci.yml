@@ -1,42 +1,29 @@
 name: CI
-
 on:
   push:
     branches:
       - "main"
   pull_request:
-    branches:
-      - "*"
+    types:
+      - opened
+      - reopened
+      - synchronize
   schedule:
     - cron: "0 0 * * *"
+
+defaults:
+  run:
+    working-directory: ./repo
 
 jobs:
   ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout V
-        uses: actions/checkout@v3
-        with:
-          repository: vlang/v
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: vlang/setup-v@v1
+      - uses: actions/checkout@v4
         with:
           path: repo
-      - name: Build V
-        run: |
-          make
-          sudo ./v symlink
-      - name: v fmt
-        run: |
-          cd repo
-          v fmt -w .
-          git diff --exit-code
-      - name: v vet .
-        run: |
-          cd repo
-          v vet .
-      - name: v test .
-        run: |
-          cd repo
-          v test .
 
+      - run: v fmt -verify .
+      - run: v vet .
+      - run: v test .
